@@ -1,6 +1,7 @@
 
 import './App.css';
-import { Form, Field } from 'react-final-form';
+import { Form, Field, FormSpy } from 'react-final-form';
+// import {}
 
 //const sleep = ms = new Promise(resolve => setTimeout(resolve, ms));
 const showResults = values => {
@@ -10,37 +11,59 @@ const showResults = values => {
 
 }
 
+const required = value => value ? undefined : 'required';
+
 function App() {
   return (
     <div className="App">
       <h1>React Final Form Basics</h1>
-      <Form onSubmit={showResults}>
+
+
+      <Form
+        onSubmit={showResults}
+        // record validation //validate={values => { }}
+        subscription={{ submitting: true, }} >
+
+
         {/* handles form states */}
         {({ handleSubmit, values, submitting }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <div>
-              <label>First Name</label>
-              <Field
-                name="firstname"
-                component="input"
-                placeholder="First Name"
-              ></Field>
+
+              <Field name="firstname" placeholder="First Name" validate={required}
+                subscription={{ value: true, visited: true, active: true, error: true, touched: true, }} >
+                {({ input, meta, placeholder }) => (
+                  <div className={meta.active ? 'inpActive' : ''}>
+                    <label>First Name</label>
+                    <input {...input} placeholder={placeholder} />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
             </div>
             <div>
-              <label>Last Name</label>
-              <Field
-                name="lastname"
-                component="input"
-                placeholder="Last Name"
-              ></Field>
+              <Field name="lastname" placeholder="Last Name" validate={required}
+                subscription={{ value: true, visited: true, active: true, error: true, touched: true }} >
+                {({ input, meta, placeholder }) => (
+                  <div className={meta.active ? 'inpActive' : ''}>
+                    <label>Last Name</label>
+                    <input {...input} placeholder={placeholder} />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
             </div>
             <div>
-              <label>Email</label>
-              <Field
-                name="email"
-                component="input"
-                placeholder="Email"
-              ></Field>
+              <Field name="email" component="input" placeholder="Email" validate={required}
+                subscription={{ value: true, visited: true, active: true, error: true, touched: true }} >
+                {({ input, meta, placeholder }) => (
+                  <div className={meta.active ? 'inpActive' : ''}>
+                    <label>Email</label>
+                    <input {...input} placeholder={placeholder} />
+                    {meta.error && meta.touched && <span>{meta.error}</span>}
+                  </div>
+                )}
+              </Field>
             </div>
             <button type='submit' disabled={submitting}>Submit</button>
             <h2>Real Time View Of Values</h2>
