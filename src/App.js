@@ -1,7 +1,9 @@
 
 import './App.css';
+
 import { Form, Field, FormSpy } from 'react-final-form';
-// import {}
+// focus on a field with Final Form
+import createDecorator from 'final-form-focus';
 
 //const sleep = ms = new Promise(resolve => setTimeout(resolve, ms));
 const showResults = values => {
@@ -10,6 +12,9 @@ const showResults = values => {
   alert(JSON.stringify(values, undefined, 2));
 
 }
+
+//pass it to FORM props as a decorator
+const focusOnError = createDecorator();
 
 const required = value => value ? undefined : 'required';
 
@@ -21,7 +26,9 @@ function App() {
 
       <Form
         onSubmit={showResults}
+        decorators={[focusOnError]}
         // record validation //validate={values => { }}
+
         subscription={{ submitting: true, }} >
 
 
@@ -67,9 +74,19 @@ function App() {
             </div>
             <button type='submit' disabled={submitting}>Submit</button>
             <h2>Real Time View Of Values</h2>
-            <pre>
+            {/* <pre>
               {JSON.stringify(values, undefined, 2)}
-            </pre>
+            </pre> */}
+            <FormSpy subscription={{ values: true }}>
+              {
+                (values) => (
+                  <pre>
+                    {JSON.stringify(values, undefined, 2)}
+                  </pre>
+                )
+              }
+            </FormSpy>
+
           </form>
         )}
 
